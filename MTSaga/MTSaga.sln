@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MTSaga.API", "MTSaga.API\MTSaga.API.csproj", "{226FFBA4-852F-42CC-83BC-E0C51A6F75FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9122AB6F-E9D7-4E6B-B94F-B7DD0FD7BD37}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "OrderService\OrderService.csproj", "{5A19BD1A-E2B7-4CD6-8BA4-9DB42465E433}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "Messages\Messages.csproj", "{109AF7D1-ECAA-42ED-AB79-23ECE5F5D20E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartTracking", "ShoppingCart\CartTracking.csproj", "{B4C23EF9-2207-4FB0-88E9-DFCCB19DE080}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Class Libraries", "Class Libraries", "{00B7A11F-071D-4528-A1E6-2B95A93A49DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C9470DFE-86AB-4CBB-8BE7-9E7826D4389B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CartTrackingService", "CartTrackingService\CartTrackingService.csproj", "{B3F84AE6-6E52-4B2A-8A00-DEC9627B9979}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{226FFBA4-852F-42CC-83BC-E0C51A6F75FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{226FFBA4-852F-42CC-83BC-E0C51A6F75FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{226FFBA4-852F-42CC-83BC-E0C51A6F75FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{226FFBA4-852F-42CC-83BC-E0C51A6F75FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A19BD1A-E2B7-4CD6-8BA4-9DB42465E433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A19BD1A-E2B7-4CD6-8BA4-9DB42465E433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A19BD1A-E2B7-4CD6-8BA4-9DB42465E433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A19BD1A-E2B7-4CD6-8BA4-9DB42465E433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{109AF7D1-ECAA-42ED-AB79-23ECE5F5D20E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109AF7D1-ECAA-42ED-AB79-23ECE5F5D20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109AF7D1-ECAA-42ED-AB79-23ECE5F5D20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109AF7D1-ECAA-42ED-AB79-23ECE5F5D20E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4C23EF9-2207-4FB0-88E9-DFCCB19DE080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4C23EF9-2207-4FB0-88E9-DFCCB19DE080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4C23EF9-2207-4FB0-88E9-DFCCB19DE080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4C23EF9-2207-4FB0-88E9-DFCCB19DE080}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3F84AE6-6E52-4B2A-8A00-DEC9627B9979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3F84AE6-6E52-4B2A-8A00-DEC9627B9979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3F84AE6-6E52-4B2A-8A00-DEC9627B9979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3F84AE6-6E52-4B2A-8A00-DEC9627B9979}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5A19BD1A-E2B7-4CD6-8BA4-9DB42465E433} = {C9470DFE-86AB-4CBB-8BE7-9E7826D4389B}
+		{109AF7D1-ECAA-42ED-AB79-23ECE5F5D20E} = {00B7A11F-071D-4528-A1E6-2B95A93A49DA}
+		{B4C23EF9-2207-4FB0-88E9-DFCCB19DE080} = {00B7A11F-071D-4528-A1E6-2B95A93A49DA}
+		{B3F84AE6-6E52-4B2A-8A00-DEC9627B9979} = {C9470DFE-86AB-4CBB-8BE7-9E7826D4389B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4974D64C-086F-4034-8269-26E18298EB6E}
+	EndGlobalSection
+EndGlobal
