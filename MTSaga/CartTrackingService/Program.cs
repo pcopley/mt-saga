@@ -12,7 +12,9 @@ namespace CartTrackingService
             var builder = new HostBuilder()
                 .ConfigureServices((host, services) => { services.AddHostedService<TrackingService>(); });
 
-            await builder.RunConsoleAsync();
+            await builder
+                .RunConsoleAsync()
+                .ContinueWith(x => Console.Out.WriteLine("Cart Tracking Service initialized"));
         }
     }
 }

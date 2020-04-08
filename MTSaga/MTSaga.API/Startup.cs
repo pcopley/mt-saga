@@ -8,14 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MassTransit.EntityFrameworkCoreIntegration;
-using MassTransit.EntityFrameworkCoreIntegration.Saga;
-using MassTransit.Saga;
-using Automatonymous;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using CartTracking;
 using CartTrackingService;
-using MassTransit.EntityFrameworkCoreIntegration.Saga.Context;
 using Messages.StateMachine;
 using Newtonsoft.Json;
 
@@ -48,8 +44,6 @@ namespace MTSaga.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -63,23 +57,11 @@ namespace MTSaga.API
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-            var sagaStateMachine = new ShoppingCartStateMachine();
-            var repository = new InMemorySagaRepository<ShoppingCart>();
-
-            var bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {
-                cfg.Host(
-                    new Uri("amqp://csrycfsz:x1ukAcpwS8Bm-jDi-lg_J2ZaC4jzKZwg@buffalo.rmq.cloudamqp.com/csrycfsz"),
-                    h => { });
-
-                cfg.ReceiveEndpoint("shopping_cart_state", e =>
-                {
-                    e.StateMachineSaga(sagaStateMachine, repository);
-                });
-            });
-
             services.AddMassTransit(cfg =>
             {
+                cfg.AddRequestClient<CartItemAdded>();
+                cfg.AddRequestClient<OrderSubmitted>();
+
                 cfg.AddSagaStateMachine<ShoppingCartStateMachine, ShoppingCart>()
                     .EntityFrameworkRepository(r =>
                     {
@@ -94,26 +76,28 @@ namespace MTSaga.API
                             });
                         });
                     });
+
+                cfg.AddBus(ConfigureRabbitMqBus);
             });
+
+            services.AddMassTransitHostedService();
 
             services.AddScoped<ShoppingCart>();
             services.AddSingleton<ShoppingCartStateMachine>();
 
-            services.AddSingleton<IPublishEndpoint>(bus);
-            services.AddSingleton<ISendEndpointProvider>(bus);
-            services.AddSingleton<IBus>(bus);
+            //services.AddSingleton<IPublishEndpoint>(bus);
+            //services.AddSingleton<ISendEndpointProvider>(bus);
+            //services.AddSingleton<IBus>(bus);
 
             var timeout = TimeSpan.FromSeconds(10);
 
             var serviceAddress =
                 new Uri(
-                    "amqp://csrycfsz:x1ukAcpwS8Bm-jDi-lg_J2ZaC4jzKZwg@buffalo.rmq.cloudamqp.com/csrycfsz/order-service");
+                    "amqp://csrycfsz:p8ww82_xYDGyobflWncpQnsf419KiH4c@buffalo.rmq.cloudamqp.com/csrycfsz/order-service");
 
             services.AddScoped<IRequestClient<ISubmitOrder, IOrderAccepted>>(x =>
                 new MessageRequestClient<ISubmitOrder, IOrderAccepted>(x.GetRequiredService<IBus>(), serviceAddress,
                     timeout, timeout));
-
-            bus.Start();
 
             services.AddSwaggerGen(swag =>
             {
@@ -122,6 +106,18 @@ namespace MTSaga.API
                     Title = "MassTransit Saga POC",
                     Version = "v1"
                 });
+            });
+        }
+
+        private static IBusControl ConfigureRabbitMqBus(IServiceProvider provider)
+        {
+            return Bus.Factory.CreateUsingRabbitMq(cfg =>
+            {
+                cfg.Host(
+                    new Uri("amqp://csrycfsz:p8ww82_xYDGyobflWncpQnsf419KiH4c@buffalo.rmq.cloudamqp.com/csrycfsz"),
+                    h => { });
+
+                cfg.ConfigureEndpoints(provider);
             });
         }
     }

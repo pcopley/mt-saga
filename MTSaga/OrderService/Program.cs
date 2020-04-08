@@ -12,7 +12,9 @@ namespace OrderService
             var builder = new HostBuilder()
                 .ConfigureServices((host, services) => { services.AddHostedService<OrderService>(); });
 
-            await builder.RunConsoleAsync();
+            await builder
+                .RunConsoleAsync()
+                .ContinueWith(x => Console.Out.WriteLine("Order Service initialized"));
         }
     }
 }

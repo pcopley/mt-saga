@@ -4,9 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Automatonymous;
 using CartTracking;
+using CartTrackingService;
 using MassTransit;
+using MassTransit.EntityFrameworkCoreIntegration.Saga;
+using MassTransit.EntityFrameworkCoreIntegration.Saga.Context;
+using MassTransit.Initializers;
 using Messages.StateMachine;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MTSaga.API.Controllers
 {
@@ -29,11 +34,21 @@ namespace MTSaga.API.Controllers
         {
             try
             {
-                await _machine.RaiseEvent(_cart, _machine.ItemAdded, new CartItemAdded
+                var dbOptionsBuilder = new DbContextOptionsBuilder()
+                    .UseSqlServer(@"Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True;Initial Catalog=MTSaga;")
+                    .EnableSensitiveDataLogging();
+
+                var sagaRepo =
+                    EntityFrameworkSagaRepository<ShoppingCart>.CreateOptimistic(() =>
+                        new CartStateDbContext(dbOptionsBuilder.Options));
+
+                var message = await MessageInitializerCache<CartItemAdded>.InitializeMessage(new
                 {
                     Timestamp = DateTime.UtcNow,
                     UserName = username
                 }, ct);
+
+                await _machine.RaiseEvent(_cart, _machine.ItemAdded, message, ct);
 
                 return Ok();
             }

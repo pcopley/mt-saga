@@ -5,9 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CartTracking;
 using MassTransit;
+using MassTransit.EntityFrameworkCoreIntegration.Saga;
 using MassTransit.EntityFrameworkCoreIntegration.Saga.Context;
-using MassTransit.Saga;
 using MassTransit.Scheduling;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
 namespace CartTrackingService
@@ -16,33 +17,28 @@ namespace CartTrackingService
     {
         private readonly IBusControl _bus;
 
-        // needed w/ dotnetcore?
-        private readonly BusHandle _busHandle;
-
-        private readonly ShoppingCartStateMachine _machine;
-
-        private readonly Lazy<ISagaRepository<ShoppingCart>> _repository;
-
-        private readonly IMessageScheduler _scheduler;
-
         public TrackingService()
         {
-            _machine = new ShoppingCartStateMachine();
+            var machine = new ShoppingCartStateMachine();
 
-            //_repository = new SagaRepository<ShoppingCart>
-            //{
-            //};
+            var dbOptionsBuilder = new DbContextOptionsBuilder()
+                .UseSqlServer(@"Data Source=(LocalDb)\MSSQLLocalDB;Integrated Security=True;Initial Catalog=MTSaga;")
+                .EnableSensitiveDataLogging();
+
+            var repository = EntityFrameworkSagaRepository<ShoppingCart>.CreateOptimistic(() =>
+                new CartStateDbContext(dbOptionsBuilder.Options));
 
             _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Host(
-                    new Uri("amqp://csrycfsz:x1ukAcpwS8Bm-jDi-lg_J2ZaC4jzKZwg@buffalo.rmq.cloudamqp.com/csrycfsz"),
+                cfg.Host(new Uri("amqp://csrycfsz:p8ww82_xYDGyobflWncpQnsf419KiH4c@buffalo.rmq.cloudamqp.com/csrycfsz"),
                     h => { });
 
-                //cfg.ReceiveEndpoint("shopping_cart_state", e =>
-                //{
-                //    e.StateMachineSaga(_machine, _repository.Value);
-                //});
+                cfg.ReceiveEndpoint("shopping_cart_state", e =>
+                {
+                    var temp = "test";
+
+                    e.StateMachineSaga(machine, repository);
+                });
             });
         }
 

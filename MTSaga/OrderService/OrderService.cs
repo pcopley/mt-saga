@@ -15,7 +15,7 @@ namespace OrderService
         {
             _bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                cfg.Host(new Uri("amqp://csrycfsz:x1ukAcpwS8Bm-jDi-lg_J2ZaC4jzKZwg@buffalo.rmq.cloudamqp.com/csrycfsz"), h => { });
+                cfg.Host(new Uri("amqp://csrycfsz:p8ww82_xYDGyobflWncpQnsf419KiH4c@buffalo.rmq.cloudamqp.com/csrycfsz"), h => { });
 
                 cfg.ReceiveEndpoint("order-service", e =>
                 {
